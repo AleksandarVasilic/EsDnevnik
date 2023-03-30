@@ -10,8 +10,11 @@ tasklist /fi "imagename eq chrome.exe" | findstr chrome.exe > nul
 if %errorlevel%==0 (
   REM Ako jeste ide na prvi tab u chromu i osvezava je.
   echo "Chrome je pokrenut, osvezavam prvu stranicu..."
-  
-  REM 
+
+  REM NE MINIMIZIRATI!!! Ponekad radi da vrati chrome iz pozadine,ponekad ne. Nemam pametnije resenje, sva ostala resenja rade sa nekim sistemskim dozvolama
+  powershell -Command "$wshell = New-Object -ComObject WScript.Shell;$wshell.AppActivate('chrome').Description;$wshell.SendKeys('{F11}');$wshell.SendKeys('{F11}');"
+
+  REM Ovde ga vraca na prvu stranicu i osvezava
   powershell -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.SendKeys]::SendWait('^1'); [System.Windows.Forms.SendKeys]::SendWait('{F5}');}"
 
 ) else (
@@ -20,8 +23,8 @@ if %errorlevel%==0 (
   setlocal EnableDelayedExpansion
   
   REM Promenljive koje cuvaju vrednosti usename i password. Rucno se zadaju vrednosti.
-  set username=
-  set password=
+  set username=username
+  set password=password
   
   REM Pokrece chrome sa zadatim URL
   start chrome "%URL%"
